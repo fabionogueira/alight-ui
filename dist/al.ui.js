@@ -308,7 +308,7 @@ al.ui = {};
  */
 al.ui.register = function (directiveName, uiConstructor, owner) {
 
-    al.directives.ui[directiveName] = {
+    alight.directives.ui[directiveName] = {
         restrict: 'A',
         init: function (element, name, scope, env) {
             var componentInstance, properties,
