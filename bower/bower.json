@@ -1,0 +1,28 @@
+{
+  "name": "alight-ui",
+  "description": "dependências externas",
+  "moduleType": [],
+  "authors": [
+    "Fábio Nogueira"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "alight-v0.10": "https://github.com/lega911/alight/archive/v0.10.12.zip",
+    "momentjs": "http://momentjs.com/downloads/moment.min.js",
+    "bootstrap": "~3.3.6",
+    "bootstrap-fileinput": "~4.2.9",
+    "bootstrap-datepicker": "~v1.5.0",
+    "twbs-pagination": "~1.3",
+    "jquery-v1.11": "https://code.jquery.com/jquery-1.11.3.js",
+    "jquery-form-v3.51": "http://malsup.github.com/min/jquery.form.min.js",
+    "jquery-mask-v1.13": "https://raw.githubusercontent.com/igorescobar/jQuery-Mask-Plugin/master/dist/jquery.mask.min.js"
+  }
+}
