@@ -1,3 +1,9 @@
+/**
+ * AlightUI 0.0.1
+ * 2016-01-30, (c) 2016 Fábio Nogueira
+ * Released under the MIT License.
+ * Full source at https://github.com/fabionogueira/alight-ui
+*/
 /*global alight, f$, Function */
 
 /**

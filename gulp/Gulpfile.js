@@ -1,3 +1,4 @@
+
 //carrega o gulp e os plugins
 var gulp   = require('gulp');
 var uglify = require('gulp-uglify');
@@ -5,6 +6,16 @@ var cssnano= require('gulp-cssnano');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
+var header = require("gulp-header");
+
+var al_version = '0.0.1';
+var dist_folder = './../dist/';
+var copyright = '/**\n'+
+                ' * AlightUI '+al_version+'\n'+
+                ' * 2016-01-30, (c) 2016 Fábio Nogueira\n'+
+                ' * Released under the MIT License.\n'+
+                ' * Full source at https://github.com/fabionogueira/alight-ui\n'+
+                '*/\n';
 
 //Arquivos que serão concatenados
 var al_files = [
@@ -25,9 +36,6 @@ var al_files = [
     "./../src/ui/ui-datepicker.js"
 ];
 
-var dist_folder = './../dist/';
-var version = '0.0.1';
-
 //checa o código de todos os arquivos que serão concatenados
 gulp.task('al-check', function(){
     return gulp.src(al_files)
@@ -36,7 +44,6 @@ gulp.task('al-check', function(){
         .reporter('default'));
 });
 
-    
 //cria al.ui.js
 gulp.task('al-ui', ['al-check'], function(){
     return gulp.src(al_files)
@@ -59,18 +66,16 @@ gulp.task('al-ui-css', function(){
         .pipe(gulp.dest(dist_folder));
 });
 
+//copia env.js
 gulp.task('copy-env', function(){
     return gulp.src(['./../env.js']).pipe(gulp.dest(dist_folder));
 });
 
-gulp.task('jshint1', function(){
-    //checa se o arquivo al.ui.js contém erro
-    return gulp.src([dist_folder+'al.ui.js']).pipe(jshint()).pipe(jshint.reporter('default'));
+//adiciona o copyright nos arquivos al.ui.js e al.ui.min.js
+gulp.task('copyright', ['al-ui-min'], function () {
+    gulp.src([dist_folder+'al.ui.min.js', dist_folder+'al.ui.js'])
+        .pipe(header(copyright))
+        .pipe(gulp.dest(dist_folder));
 });
 
-gulp.task('jshint2', function(){
-    //checa se o arquivo al.ui.js contém erro
-    return gulp.src([dist_folder+'al.ui.min.js']).pipe(jshint()).pipe(jshint.reporter('default'));
-});
-
-gulp.task('default', ['al-ui-min', 'al-ui-css', 'copy-env']);
+gulp.task('default', ['al-ui-min', 'copyright', 'al-ui-css', 'copy-env']);
