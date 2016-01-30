@@ -2,25 +2,27 @@
 
 //pagination
 (function () {
-    var defaultProperties = {
-        totalPages: 10,
-        visiblePages: 4
-    };
     
-    al.ui.register('pagination', function (properties, element, scope, env) {
-        var pagination = {};
-        
-        properties = $.extend({}, defaultProperties, properties);
-        properties.onPageClick = function (event, page) {
-            pagination.emit('change', [page]);
-        };
-        
-        $(element).twbsPagination(properties);
+    al.ui.register('pagination', {
+        owner:false,
+        defaults:{
+            totalPages: 10,
+            visiblePages: 4
+        },
+        create:function (properties, element, scope, env) {
+            var pagination = {};
 
-        //global properties/methods
-        return pagination;
+            properties.onPageClick = function (event, page) {
+                pagination.emit('change', [page]);
+            };
 
-    }, false);
+            $(element).twbsPagination(properties);
+
+            //global properties/methods
+            return pagination;
+
+        }
+    });
 
 }());
 

@@ -3,14 +3,15 @@
 //tabs
 (function () {
 
-    al.ui.register('tabs', function (properties, element, scope, env) {
+    al.ui.register('tabs', {
+        owner:false,
+        create:function (properties, element, scope, env) {
+            $(element).tab();
 
-        $(element).tab();
+            return {
 
-        return {
-            
-        };
-
-    }, false);
+            };
+        }
+    });
 
 }());

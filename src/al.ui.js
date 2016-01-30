@@ -303,11 +303,10 @@ al.ui = {};
  *          return button;
  *      });
  * @param {String} directiveName
- * @param {Function} uiConstructor
- * @param {Boolean} owner
+ * @param {Function|Object} uiDefinition
  */
-al.ui.register = function (directiveName, uiConstructor, owner) {
-
+al.ui.register = function (directiveName, uiDefinition) {
+            
     alight.directives.ui[directiveName] = {
         restrict: 'A',
         init: function (element, name, scope, env) {
@@ -315,6 +314,9 @@ al.ui.register = function (directiveName, uiConstructor, owner) {
                 moduleScope = al.__processingModuleScope;
 
             properties = al.ui.propertiesToJson(element);
+            if (uiDefinition.defaults){
+                properties = $.extend({}, uiDefinition.defaults, properties);
+            } 
             componentInstance = this.create(element, properties);
 
             if (moduleScope && name){
@@ -322,14 +324,14 @@ al.ui.register = function (directiveName, uiConstructor, owner) {
                 moduleScope.$Component[name] = componentInstance;
             }
 
-            if (owner !== false) {
+            if (uiDefinition.owner !== false) {
                 return {
                     owner: true
                 };
             }
         },
         create: function(element, properties, scope, moduleScope, env){
-            return al.observable(uiConstructor(properties, element, scope, env), moduleScope);
+            return al.observable(uiDefinition.create(properties, element, scope, env), moduleScope);
         }
     };        
 
