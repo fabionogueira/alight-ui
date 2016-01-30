@@ -23,7 +23,7 @@ $ # os pacotes serão adicionados na pasta /path/to/alight-ui/vendor/
 ```sh
 $ cd /path/to/alight-ui/gulp/
 $ npm init
-$ # os pacotes serão adicionados na pasta /path/to/alight-ui/vendor/
+$ # as dependências serão adicionadas na pasta /path/to/alight-ui/gulp/node_modules
 ```
 
 ### Compilando um pacote personalizado
