@@ -8,83 +8,75 @@ var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var header = require("gulp-header");
 
-var al_version = '0.0.1';
 var dist_folder = './../dist/';
-var copyright = '/**\n'+
-                ' * AlightUI '+al_version+'\n'+
-                ' * 2016-01-30, (c) 2016 Fábio Nogueira\n'+
-                ' * Released under the MIT License.\n'+
-                ' * Full source at https://github.com/fabionogueira/alight-ui\n'+
-                '*/\n';
 
-//Arquivos que serão concatenados em al.ui.js
-var al_files = {
-    core: [
+var al_core = {
+    name  : "al.core",
+    source: [
         "./../src/al.core.js",
         "./../src/al.alert.js",
         "./../src/services/HttpService.js",
         "./../src/services/ModuleService.js",
         "./../src/services/ValidatorService.js",
         "./../src/factories/HttpFactory.js",
-        "./../src/directives/ngName.js",
-        "./../src/directives/ngMask.js",
-        "./../src/directives/ngDisabled.js",
-        "./../src/directives/ngHide.js",
-        "./../src/directives/ngIncludeCache.js",
-        "./../src/directives/ngModule.js",
-        "./../src/directives/ngModel.js"],
-    ui: [
+        "./../src/directives/al-name.js",
+        "./../src/directives/al-disabled.js",
+        "./../src/directives/al-hide.js",
+        "./../src/directives/al-module.js"
+    ]
+};
+var al_directives = {
+    name  : "al.directives",
+    source: [
+        "./../src/directives/al-include-cache.js",
+        "./../src/directives/al-mask.js",
+        "./../src/directives/al-model.js"
+    ]
+};
+var al_ui = {
+    name  : "al.ui",
+    source: [
         "./../src/ui/ui-modal.js",
-        "./../src/ui/ui-datepicker.js"]
+        "./../src/ui/ui-datepicker.js",
+        "./../src/ui/ui-pagination.js",
+        "./../src/ui/ui-tabs.js"
+    ]
 };
 
+function concatFiles(config){
+    var dist = dist_folder + (config.dest||'');
+    
+    gulp.task(config.name, function(){
+        return gulp.src(config.source)
+            .pipe(concat(config.name+'.js'))
+            .pipe(gulp.dest(dist));
+    });
+
+    gulp.task(config.name+'.min', [config.name], function () {
+        return gulp.src(dist + config.name + '.js' )
+            .pipe(rename(config.name + '.min.js'))
+            .pipe(uglify())
+            .pipe(gulp.dest(dist));
+    });
+}
+
 //checa o código de todos os arquivos que serão concatenados
-gulp.task('al-check', function(){
-    return gulp.src(al_files.core.concat(al_files.ui))
+gulp.task('check-all', function(){
+    return gulp.src(al_core.source.concat(al_ui.source, al_directives.source))
         .pipe(jshint())
         .pipe(jshint
         .reporter('default'));
 });
 
-//cria al.core.js
-gulp.task('al-core', ['al-check'], function(){
-    return gulp.src(al_files.core)
-        .pipe(concat('al.core.js'))
-        .pipe(gulp.dest(dist_folder));
-});
-
-//cria al.ui.js
-gulp.task('al-ui', ['al-check'], function(){
-    return gulp.src(al_files.ui)
-        .pipe(concat('al.ui.js'))
-        .pipe(gulp.dest(dist_folder));
-});
-
-//cria al.core.min.js
-gulp.task('al-core-min', ['al-core'], function () {
-    return gulp.src(dist_folder+'al.core.js')
-        .pipe(rename('al.core.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest(dist_folder));
-});
-
-//cria al.ui.min.js
-gulp.task('al-ui-min', ['al-ui'], function () {
-    return gulp.src(dist_folder+'al.ui.js')
-        .pipe(rename('al.ui.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest(dist_folder));
-});
-
 //minifica al.core.css
-gulp.task('al-core-css', function(){
+gulp.task('al.core.css', function(){
     return gulp.src(['./../src/al.core.css'])
         .pipe(cssnano({discardComments: {removeAll: true}}))
         .pipe(gulp.dest(dist_folder));
 });
 
 //minifica al.ui.css
-gulp.task('al-ui-css', function(){
+gulp.task('al.ui.css', function(){
     return gulp.src(['./../src/ui/al.ui.css'])
         .pipe(cssnano({discardComments: {removeAll: true}}))
         .pipe(gulp.dest(dist_folder));
@@ -92,14 +84,18 @@ gulp.task('al-ui-css', function(){
 
 //copia env.js
 gulp.task('copy-env', function(){
-    return gulp.src(['./../env.js']).pipe(gulp.dest(dist_folder));
+    return gulp.src(['./../src/env.js']).pipe(gulp.dest(dist_folder));
 });
 
 //adiciona o copyright nos arquivos al.core.js, al.core.min.js
-gulp.task('copyright', ['al-core-min'], function () {
-    gulp.src([dist_folder+'al.core.min.js', dist_folder+'al.core.js'])
-        .pipe(header(copyright))
-        .pipe(gulp.dest(dist_folder));
-});
+//gulp.task('copyright', ['al-core-min'], function () {
+//    gulp.src([dist_folder+'al.core.min.js', dist_folder+'al.core.js'])
+//        .pipe(header(copyright))
+//        .pipe(gulp.dest(dist_folder));
+//});
 
-gulp.task('default', ['al-core-min', 'al-ui-min', 'copyright', 'al-core-css', 'al-ui-css', 'copy-env']);
+concatFiles(al_core);
+concatFiles(al_ui);
+concatFiles(al_directives);
+
+gulp.task('default', ['al.core.min', 'al.ui.min', 'al.directives.min', 'al.core.css', 'al.ui.css', 'copy-env']);

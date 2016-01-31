@@ -1,9 +1,13 @@
 /*global alight */
 
+//file: directives/al-include-cache.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x
+ * @dependecies
+ *      alight,
+ *      jQuery
  * @directive al-include-cache
  */
 

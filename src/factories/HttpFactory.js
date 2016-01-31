@@ -1,9 +1,13 @@
 /*global al */
 
+//file: factories/HttpFactory.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x
+ * @dependecies
+ *      alight,
+ *      jQuery
  * @factory HttpFactory
  */
     

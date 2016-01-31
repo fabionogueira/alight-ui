@@ -1,9 +1,12 @@
 /*global alight */
 
+//file: directives/al-hide.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10
+ * @dependecies
+ *      alight
  * @directive al-hide
  */
 

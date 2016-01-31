@@ -1,13 +1,13 @@
 /*global alight */
 
+//file: directives/al-model-error.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x, jQuery Mask Plugin v1.13.4 [github.com/igorescobar/jQuery-Mask-Plugin]
+ * @dependecies
+ *      alight
  * @directive al-model-error
- * @param {HTMLElement} element
- * @param {String} name
- * @param {Object} scope
  */
 
 alight.directives.al.modelError = function (element, name, scope) {

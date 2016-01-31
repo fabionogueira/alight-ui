@@ -1,9 +1,12 @@
 /*global alight */
 
+//file: directives/al-disabled.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10
+ * @dependecies
+ *      alight
  * @directive al-disabled
  */
 

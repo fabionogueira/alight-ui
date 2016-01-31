@@ -1,9 +1,3 @@
-/**
- * AlightUI 0.0.1
- * 2016-01-30, (c) 2016 Fábio Nogueira
- * Released under the MIT License.
- * Full source at https://github.com/fabionogueira/alight-ui
-*/
 /*global alight, f$, Function */
 
 /**
@@ -429,110 +423,6 @@ al.ui.getTemplate = function (element) {
 
     return '';
 };
-
-/*global al, f$ */
-
-//al.ui.alert
-(function(){
-    var alerts = [], zIndex=1060;
-    
-    al.ui.alert = function(/* 
-        (options) 
-        (message) 
-        (message, [buttons]) 
-        (message, callback) 
-        (message, [buttons], callback) */){
-        
-        var options, alert;
-        
-        if (f$.isObject(arguments[0])) {
-            options=arguments[0];        
-        }else{
-            options = {
-                message : arguments[0],
-                buttons : f$.isArray(arguments[1]) ? arguments[1] : null,
-                callback: f$.isFunction(arguments[1]) ? arguments[1] : f$.isFunction(arguments[2]) ? arguments[2] : null
-            };
-        }
-        
-        options.type = options.type || 'warning';
-        options.effect = options.effect || 'fade';
-        
-        alert = getAlert();
-        
-        alert.__effect__ = options.effect;
-        alert.__popup__.className   = 'alert alert-'+options.type;
-        alert.__content__.innerHTML = options.message;
-        
-        alert.show(options.parent || document.body);
-    };
-    
-    function getAlert(){
-        var i, alert;
-        
-        for (i=0; i<alerts.length; i++){
-            alert = alerts[i];
-            if (alert.__visible__) return alert;
-        }
-        
-        alert = document.createElement('div');                                                                       //alert,self
-        alert.className = 'modal-dialog';
-        alert.innerHTML   = '<div class="alert alert-danger" style="min-height:50px">'+              //__popup__
-                                '<button type="button" class="close" onclick="this.parentNode.parentNode.close()">'+ //__close__
-                                    '<span>×</span>'+
-                                '</button>'+
-                                '<div></div>'+                                                                       //__content__
-                            '</div>';
-                      
-        alert.__backdrop  = document.createElement('div');
-        alert.__popup__   = alert.firstChild;
-        alert.__close__   = alert.firstChild.childNodes[0];
-        alert.__content__ = alert.firstChild.childNodes[1];
-        alert.__effect__  = 'fade';
-        
-        alert.close = function(){
-            var self=this;
-            
-            //aplica effeito de ocutação
-            self.__backdrop.className = 'modal-backdrop fade out';
-            self.className = 'modal-dialog '+self.__effect__+' out';
-            
-            setTimeout(function(){
-                self.__visible__ = false;
-                self.__parent.removeChild(self.__backdrop);
-                self.__parent.removeChild(self);
-                self.__parent = null;
-            },1000);
-        };
-        alert.show = function(parent){
-            var self=this;
-            
-            self.style.zIndex = (zIndex++);
-            self.style.display='block';
-            self.__visible__ = true;
-            
-            //inicia o estado do div backdrop e do modal (pre efeito de exibição)
-            self.className = 'modal-dialog '+self.__effect__;
-            self.__backdrop.className = 'modal-backdrop fade';
-            
-            self.__parent = parent;
-            
-            parent.appendChild(self.__backdrop);
-            parent.appendChild(this);
-            
-            setTimeout(function(){
-                //muda as classes aplicando os efeitos de exibição
-                self.className='modal-dialog '+self.__effect__+' in';
-                self.__backdrop.className = 'modal-backdrop fade in';
-            },1);
-        };
-        
-        alerts.push(alert);
-        
-        return alert;
-    }
-    
-}());
 
 /*global al */
 
@@ -1047,5 +937,350 @@ al.ui.getTemplate = function (element) {
         }
     });
 
+}());
+
+
+/*global alight */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10, jQuery 1.x
+ * @directive al-name
+ */
+    
+alight.directives.al.name = {
+    restrict: 'A',
+    init: function(element, name, scope){
+        scope.$Component[name]=element;
+        return {};
+    }
+};
+
+/*global alight */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10
+ * @directive al-disabled
+ */
+
+alight.directives.al.disabled = {
+    init: function(element, name, scope, env) {
+        var activeElement, activeUrl, child, initValue, self;
+
+        child = null;
+        activeElement = null;
+        activeUrl = null;
+        initValue = null;
+
+        self = {
+            start: function () {
+                self.watchModel();                    
+                return self.initUpdate();
+            },
+            updateDom: function (value) {
+                value===false ? element.removeAttribute('disabled') : element.setAttribute('disabled', 'disabled');
+            },
+            watchModel: function () {
+                var w;
+                w = scope.$watch(name, self.updateDom, {
+                    readOnly: true
+                });
+                return initValue = w.value;
+            },
+            initUpdate: function () {
+                return self.updateDom(initValue);
+            }
+        };
+
+        return self;
+    }
+};
+
+
+/*global alight */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10
+ * @directive al-hide
+ */
+
+alight.directives.al.hide = {
+    init: function(element, name, scope, env) {
+        var activeElement, activeUrl, child, initValue, self;
+
+        child = null;
+        activeElement = null;
+        activeUrl = null;
+        initValue = null;
+
+        self = {
+            start: function () {
+                self.watchModel();                    
+                return self.initUpdate();
+            },
+            updateDom: function (value) {
+                value===false ? element.removeAttribute('hidden') : element.setAttribute('hidden', 'true');
+            },
+            watchModel: function () {
+                var w;
+                w = scope.$watch(name, self.updateDom, {
+                    display: 'none'
+                });
+                return initValue = w.value;
+            },
+            initUpdate: function () {
+                return self.updateDom(initValue);
+            }
+        };
+
+        return self;
+    }
+};
+
+
+/*global alight */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10, jQuery 1.x
+ * @directive al-include-cache
+ */
+
+(function () {
+    var include_cache = {};
+
+    alight.directives.al.includeCache = function () {
+        var self = alight.directives.al.include.init.apply(null, arguments);
+
+        self.loadHtml = function (cfg) {
+            var pr = include_cache[cfg.url];
+
+            if (!pr) {
+                include_cache[cfg.url] = pr = $.get(cfg.url);
+            }
+            if (cfg.success)
+                pr.done(cfg.success);
+            if (cfg.error)
+                pr.fail(cfg.error);
+        };
+
+        return self;
+    };
+    
+}());
+
+
+/*global alight, al, f$ */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10
+ * @directive al-module
+ */
+    
+alight.directives.al.module = {
+    priority: 100,
+    init: function(element, name, scope, env) {
+        var activeElement, activeUrl, child, initValue, self;
+
+        child = null;
+        activeElement = null;
+        activeUrl = null;
+        initValue = null;
+
+        self = {
+            owner: true,
+            topElement: null,
+            start: function () {
+                self.watchModel();                    
+                return self.initUpdate();
+            },
+            insertModule: function (module){
+                if (activeElement){
+                    //child.$destroy();
+                    f$.remove(activeElement);
+                }
+
+                activeElement = module.view;
+                child = module.scope;
+                element.appendChild(activeElement);
+            },
+            updateDom: function (objOrStr) {
+                if (!objOrStr) {
+                    if (activeElement){
+                        f$.remove(activeElement);
+                    }
+                    return;
+                }
+
+                objOrStr.scope = objOrStr.scope || scope;
+                al.service('ModuleService').load(objOrStr.name, objOrStr, self.insertModule);
+            },
+            watchModel: function () {
+                var w;
+                w = scope.$watch(name, self.updateDom, {
+                    readOnly: true
+                });
+                return initValue = w.value;
+            },
+            initUpdate: function () {
+                return self.updateDom(initValue);
+            }
+        };
+
+        return self;
+    }
+};
+    
+
+
+/*global alight, al */
+
+/**
+ * @author Fábio Nogueira
+ * @version 1.0
+ * @dependecies alight 0.10, jQuery 1.x, jQuery Mask Plugin v1.13.4 [github.com/igorescobar/jQuery-Mask-Plugin]
+ * @directive al-model
+ */
+
+(function(){
+    var validatorService = al.service('ValidatorService');
+    
+    //ng-model
+    alight.directives.al.model = function (element, name, scope) {
+        var parts, model, modelName, dataModelName, field, self;
+        
+        if (!scope.$system.__modelErrorDirectiveElements){
+            scope.$system.__modelErrorDirectiveElements = {};
+        }
+        
+        if (element.type || element.nodeName==="SELECT" || element.nodeName === "TEXTAREA"){
+            //<input type=radio>                      ::herança de al-radio
+            if(element.type==='radio'){
+                self = alight.directives.al.radio.init.apply(null, arguments);
+            }
+            //<input type=checkbox>                   ::herança de al-checked
+            else if (element.type==='checkbox'){
+                self = alight.directives.al.checked.init.apply(null, arguments);
+            }
+            //<input type=text>, <select>, <textarea> ::herança de al-value
+            else{
+                self = alight.directives.al.value.apply(null, arguments);
+            }
+            self.updateDom_ = self.updateDom;
+            self.updateDom = function (value){
+                self.fieldChanged(value);
+                return self.updateDom_(value);
+            };
+        }
+        
+        self.fieldChanged = function(value, custom){
+            var a;
+            
+            if (self.changing_) {
+                self.changing_ = false;
+                return;
+            }
+            
+            scope[dataModelName][field] = value;
+            
+            a = validateModel(model, scope[dataModelName], function(fieldName, errors){
+                if (fieldName===field){
+                    setElementValidateStatus(element, scope, name, errors);
+                }
+            });
+            
+            scope[dataModelName]['$VALIDATE']  = a[0];
+            scope[dataModelName]['$EDIT_MODE'] = a[1];
+            
+            setTimeout(function(){
+                self.changing_ = true;
+                scope.$scan(function(){
+                    self.changing_ = false;
+                });                
+            },10);
+        };
+        
+        $(element).on('customChange', function(){
+            self.fieldChanged(this.value, true);
+        });
+        
+        parts         = name.split('.');
+        modelName     = parts[0].substring(1);
+        field         = parts[1];
+        model         = al.model(modelName, scope);
+        dataModelName = '$'+modelName;
+        
+        if (model){
+            initFieldValidator(model.fields[field], element);
+        }
+        
+        return self;
+    };
+    
+    function initFieldValidator(field, element){
+        var validator;
+        
+        if (field){
+            validator = validatorService.getValidator(field.type);
+            if (validator) validator.init(element, field);
+            if (field.size) validatorService.getValidator('size').init(element, field);
+        }
+    }
+    function validateModel(model, dataModel, fn){
+        var i, r, valid=true, mode='new';
+
+        //valida os campos do model
+        for (i in dataModel){
+
+            if (model.fields[i]){
+                r = validatorService.checkValue(dataModel[i], model.fields[i]);
+                
+                //se o campo é chave primária
+                if (model.fields[i].key && dataModel[i]){
+                    mode='edit';
+                }
+                
+                if (r.length===0){
+                    fn(i);
+                }else{
+                    valid=false;
+                    fn(i, r);
+                }
+            }
+        }
+
+        return [valid, mode];
+    }
+    function setElementValidateStatus(element, scope, name, errors){
+        var sys = scope.$system, elErr;
+        
+        if (sys.__modelErrorDirectiveElements){ 
+            if (sys.__modelErrorDirectiveElements[name]){
+                elErr = sys.__modelErrorDirectiveElements[name];
+            }else{
+                sys.__modelErrorDirectiveElements[name] = element;
+            }
+        }
+        
+        if (errors){
+            element.setAttribute(alight.directives.al.modelError.ATTR_MODEL_ERROR, errors.join('|') );
+            if (elErr){
+                elErr.innerHTML = errors.join('|');
+            }            
+        }else{
+            element.removeAttribute(alight.directives.al.modelError.ATTR_MODEL_ERROR);
+            if (elErr){
+                elErr.innerHTML = '';
+            }
+        }
+    }
 }());
 

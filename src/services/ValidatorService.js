@@ -1,9 +1,16 @@
 /*global alight, moment, al, ENV */
 
+//file: services/ValidatorService.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x
+ * @dependecies
+ *      alight
+ *      jQuery
+ *      moment
+ *      ng-mask
+ *      ng-datapicker
  * @service ValidatorService
  */
 

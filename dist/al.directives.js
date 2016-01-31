@@ -1,7 +1,5 @@
 /*global alight */
 
-//file: directives/al-mask.js
-
 /**
  * @author Fábio Nogueira
  * @version 1.0

@@ -1,9 +1,12 @@
 /*global alight, al, f$ */
 
+//file: directives/al-module.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x
+ * @dependecies
+ *      alight
  * @directive al-module
  */
     

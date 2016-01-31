@@ -1,9 +1,13 @@
 /*global alight, al */
 
+//file: directives/al-model.js
+
 /**
  * @author Fábio Nogueira
  * @version 1.0
- * @dependecies alight 0.10, jQuery 1.x, jQuery Mask Plugin v1.13.4 [github.com/igorescobar/jQuery-Mask-Plugin]
+ * @dependecies
+ *      alight,
+ *      jQuery
  * @directive al-model
  */
 
